@@ -85,7 +85,7 @@ class framer(gr.sync_block):
         # NOTE: Add the last sample from the previous work() call to the 
         # beginning of this block of samples
         in0_pulses = np.zeros(N+1, dtype=int)
-        in0_pulses[np.insert(in0[0:N], 0, self.prev_in0) >= self.threshold] = 1
+        in0_pulses[np.insert(in0[0:N], 0, np.float32(self.prev_in0)) >= self.threshold] = 1
 
         # Set prev_in0 for the next work() call
         self.prev_in0 = in0[N-1]
@@ -168,10 +168,11 @@ class framer(gr.sync_block):
                         # the packet length
                         self.prev_eob_idx = pulse_idx + (NUM_PREAMBLE_BITS + MIN_NUM_BITS - 1)*self.sps
 
+                        print(type(int(self.nitems_written(0) - (self.N_hist-1)) + pulse_idx))
                         # Tag the start of the burst (preamble)
                         self.add_item_tag(  
                             0,
-                            (self.nitems_written(0) - (self.N_hist-1)) + pulse_idx,
+                            int((self.nitems_written(0) - (self.N_hist-1)) + pulse_idx),
                             pmt.to_pmt('burst'),
                             pmt.to_pmt(('SOB', snr)),
                             pmt.to_pmt('framer')
