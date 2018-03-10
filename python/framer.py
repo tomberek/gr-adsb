@@ -168,7 +168,6 @@ class framer(gr.sync_block):
                         # the packet length
                         self.prev_eob_idx = pulse_idx + (NUM_PREAMBLE_BITS + MIN_NUM_BITS - 1)*self.sps
 
-                        print(type(int(self.nitems_written(0) - (self.N_hist-1)) + pulse_idx))
                         # Tag the start of the burst (preamble)
                         self.add_item_tag(  
                             0,
