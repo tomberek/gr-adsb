@@ -1065,11 +1065,11 @@ class decoder(gr.sync_block):
             else:
                 # Figure out what went wrong
                 valid_lat_lon = False
-                print 'valid_lat_lon', valid_lat_lon
-                print 'lat_cpr', lat_cpr
-                print 'lon_cpr', lon_cpr
-                print 'lat', lat
-                print 'lon', lon
+                #print 'valid_lat_lon', valid_lat_lon
+                #print 'lat_cpr', lat_cpr
+                #print 'lon_cpr', lon_cpr
+                #print 'lat', lat
+                #print 'lon', lon
 
             self.plane_dict[self.aa_str]['altitude'] = alt
             if np.isnan(lat) == False and np.isnan(lon) == False:
