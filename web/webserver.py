@@ -56,6 +56,44 @@ def index():
     return app.send_static_file("index.html")
 
 
+import requests 
+
+def xml_float(ll,data):
+    xml = """<?xml version='1.0'?>
+    <methodCall>                 
+    <methodName>set_""" + ll + """</methodName>                  
+    <params>                     
+    <param>                      
+    <value><double>""" + data + """             
+    </double></value>            
+    </param>                     
+    </params>                    
+    </methodCall>"""
+    return xml
+def xml_update():
+    xml = """<?xml version='1.0'?>
+    <methodCall>                 
+    <methodName>set_update_pos</methodName>                  
+    <params>                     
+    <param>                      
+    <value><int>1</int></value>            
+    </param>                     
+    </params>                    
+    </methodCall>"""
+    return xml
+
+@socketio.on("updatePos")
+def updatePos(lat,lng):
+    headers = {'Content-Type': 'text/xml'}
+    xml = xml_float("lat",str(lat))
+    res = requests.post("http://10.10.1.1:5002/RPC2",data=xml,headers=headers)
+    xml = xml_float("lon",str(lng))
+    requests.post("http://10.10.1.1:5002/RPC2",data=xml,headers=headers)
+    xml = xml_update()
+    requests.post("http://10.10.1.1:5002/RPC2",data=xml,headers=headers)
+
+
+
 @socketio.on("connect")
 def connect():
     print("Client connected", request.sid)

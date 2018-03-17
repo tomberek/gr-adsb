@@ -102,6 +102,24 @@ function initialize() {
   // map.setMapTypeId(google.maps.MapTypeId.TERRAIN);
   // map.setMapTypeId(google.maps.MapTypeId.HYBRID);
   
+	function initMap(initialLocation) {
+        console.log("init map")
+        map.setCenter(initialLocation);
+        // init marker
+        marker = new google.maps.Marker({
+            position: initialLocation,
+            draggable: true,
+            map: map,
+            title: "You are here"
+        });
+		google.maps.event.addListener(marker, 'dragend', function () {
+            // you know you'd be better off with 
+            // marker.getPosition().lat(), right?
+            var lat=marker.getPosition().lat()
+            var lng=marker.getPosition().lng()
+            socket.emit("updatePos",lat,lng)
+        });
+	}
 
   // Try HTML5 geolocation
   locationInfoWindow = new google.maps.InfoWindow({map: map});
@@ -115,6 +133,9 @@ function initialize() {
       locationInfoWindow.setPosition(pos);
       locationInfoWindow.setContent('Location found.');
       map.setCenter(pos);
+      initMap(new google.maps.LatLng(
+                          position.coords.latitude, position.coords.longitude
+                      ))
     }, function() {
       handleLocationError(true, locationInfoWindow, map.getCenter());
     });
