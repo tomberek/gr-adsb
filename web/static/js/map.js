@@ -145,7 +145,7 @@ function initialize() {
   }
 
   // Create SocketIO instance
-  var socket = io('http://0.0.0.0:5000');
+  var socket = io('http://' + window.location.host + ':5000');
   
   socket.on('connect', function() {
     console.log('Client has connected via SocketIO.');
@@ -299,10 +299,10 @@ function getInfoString(plane) {
   str += '<tr><td><b>Callsign</b></td><td><a href=\"http://flightaware.com/live/flight/' + plane.callsign + '\" target=\"_blank\">' + plane.callsign + '</a></td></tr>';
   str += '<tr><td><b>Altitude</b></td><td>' + plane.altitude + ' ft</td></tr>';
   str += '<tr><td><b>Vertical Rate</b></td><td>' + plane.vertical_rate + ' ft/min</td></tr>';
-  str += '<tr><td><b>Speed</b></td><td>' + plane.speed.toFixed(0) + ' kt</td></tr>';
-  str += '<tr><td><b>Heading</b></td><td>' + plane.heading.toFixed(0) + ' deg</td></tr>';
-  str += '<tr><td><b>Latitude</b></td><td>' + plane.latitude.toFixed(4) + '</td></tr>';
-  str += '<tr><td><b>Longitude</b></td><td>' + plane.longitude.toFixed(4) + '</td></tr>';  
+  str += '<tr><td><b>Speed</b></td><td>' + parseFloat(plane.speed).toFixed(0) + ' kt</td></tr>';
+  str += '<tr><td><b>Heading</b></td><td>' + parseFloat(plane.heading).toFixed(0) + ' deg</td></tr>';
+  str += '<tr><td><b>Latitude</b></td><td>' + parseFloat(plane.latitude).toFixed(4) + '</td></tr>';
+  str += '<tr><td><b>Longitude</b></td><td>' + parseFloat(plane.longitude).toFixed(4) + '</td></tr>';  
   str += "</table>"
 
   return str;

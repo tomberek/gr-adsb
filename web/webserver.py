@@ -25,13 +25,14 @@ from threading import Thread
 import time 
 import zmq
 import pmt
+import json
 
 HTTP_PORT   = 5000
 ZMQ_PORT    = 5001
 
 app = Flask(__name__, static_url_path="")
-# app.config["SECRET_KEY"] = "secret!"
-socketio = SocketIO(app)
+app.config["SECRET_KEY"] = "secret!"
+socketio = SocketIO(app,async_mode="gevent")
 
 
 def background_thread():
@@ -47,7 +48,8 @@ def background_thread():
         pdu = pmt.deserialize_str(pdu_bin)
         plane = pmt.to_python(pmt.car(pdu))
 
-        socketio.emit("updatePlane", plane)
+        plane['snr']=99
+        res = socketio.emit("updatePlane", data=plane)
         time.sleep(0.010)
 
 
@@ -86,11 +88,11 @@ def xml_update():
 def updatePos(lat,lng):
     headers = {'Content-Type': 'text/xml'}
     xml = xml_float("lat",str(lat))
-    res = requests.post("http://10.10.1.1:5002/RPC2",data=xml,headers=headers)
+    res = requests.post("http://127.0.0.1:5002/RPC2",data=xml,headers=headers)
     xml = xml_float("lon",str(lng))
-    requests.post("http://10.10.1.1:5002/RPC2",data=xml,headers=headers)
+    requests.post("http://127.0.0.1:5002/RPC2",data=xml,headers=headers)
     xml = xml_update()
-    requests.post("http://10.10.1.1:5002/RPC2",data=xml,headers=headers)
+    requests.post("http://127.0.0.1:5002/RPC2",data=xml,headers=headers)
 
 
 
